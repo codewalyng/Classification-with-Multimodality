@@ -1,0 +1,19 @@
+# Ignorer tous les fichiers .log
+*.log
+
+# Ignorer un dossier spécifique
+ready_data/
+
+# Ignorer un fichier spécifique
+config.env
+
+# Ignorer tous les fichiers dans un dossier spécifique
+logs/*.txt
+
+# Ignorer des fichiers, sauf un en particulier
+!important.log
+
+# Commentaire pour documenter
+# Fichiers temporaires
+*.tmp
+*.temp
