@@ -17,3 +17,5 @@ logs/*.txt
 # Fichiers temporaires
 *.tmp
 *.temp
+*.DS_Store
+*.idea
