@@ -88,7 +88,6 @@ else:
     if not os.path.exists("utilfiles/ready_data"):
         os.makedirs("utilfiles/ready_data")
 
-
     # Generate embeddings for text
     def generate_text_embeddings(texts, tokenizer, model):
         text_embeddings = []
