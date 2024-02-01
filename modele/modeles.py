@@ -11,6 +11,7 @@ bert_model = bert_model.eval()
 weights = models.ResNet152_Weights.IMAGENET1K_V1
 resnet_model = models.resnet152(weights=weights)
 
+
 class MultimodalClassifier(nn.Module):
     def __init__(self, text_embedding_dim, image_embedding_dim, num_mastercategory, num_subcategory, num_article_type):
         """

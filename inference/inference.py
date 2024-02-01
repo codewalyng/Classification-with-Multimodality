@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from modele.modeles import MultimodalClassifier
 
 
-# Fonctions auxiliaires
+# Auxiliaries functions
 def load_model(model_path, device):
     model = MultimodalClassifier(text_embedding_dim=1024, image_embedding_dim=2048,
                                  num_mastercategory=7, num_subcategory=45, num_article_type=141)
@@ -58,9 +58,7 @@ def inference(model, text_embeddings, image_embeddings):
     return mastercategory_outputs, subcategory_outputs, article_type_outputs
 
 
-
-
-# Chargement du modèle
+# Model loading
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = load_model("model_state.pth", device)
 
