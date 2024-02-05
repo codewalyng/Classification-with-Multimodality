@@ -1,13 +1,16 @@
 import torch
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from datasets import load_dataset, DatasetDict
 from transformers import BertModel, BertTokenizer
 from torchvision import models
 import torch.nn as nn
-from utilfiles.data_import import preprocess_image
+from utilfiles.data_import import (preprocess_image, masterCategory_binarizer,
+                                   subCategory_binarizer, articleType_binarizer)
 import matplotlib.pyplot as plt
 from modele.modeles import MultimodalClassifier
+
 
 # Define constants for better readability
 TEXT_EMBEDDING_DIM = 1024
@@ -35,14 +38,17 @@ bert_model = BertModel.from_pretrained('bert-large-uncased')
 bert_model = bert_model.eval()
 
 # Prepare the data
-# Prepare the data
 dataset = load_dataset("ashraq/fashion-product-images-small")
-indices = [11]
+indices = [44000]
 new_train_dataset = dataset['train'].select(indices)
 # Construire un nouveau DatasetDict avec ce dataset
 dataset = DatasetDict({
     'train': new_train_dataset
 })
+
+df = pd.DataFrame(dataset['train'])
+df_cat = df[['masterCategory', 'subCategory','articleType']]
+print(df_cat)
 
 
 # Generate embeddings for text
@@ -133,15 +139,30 @@ mastercategory_output, subcategory_output, article_type_output = model(text_embe
 # Threshold the predictions (exemple de seuillage à 0.5, ajustez selon les besoins)
 sigmoid = torch.sigmoid
 mastercategory_predictions = [sigmoid(output) > 0.5 for output in mastercategory_output]
+mastercategory_predictions_array = np.array(mastercategory_predictions)
+decoded_masterCategory = masterCategory_binarizer.inverse_transform(mastercategory_predictions_array)
 subcategory_predictions = [sigmoid(output) > 0.5 for output in subcategory_output]
-article_type_predictions = [sigmoid(output) > 0.5 for output in article_type_output]
+subcategory_predictions_predictions_array = np.array(subcategory_predictions)
+decoded_subcategory = subCategory_binarizer.inverse_transform(subcategory_predictions_predictions_array)
 
+article_type_predictions = [sigmoid(output) > 0.5 for output in article_type_output]
+article_type_predictions_array = np.array(article_type_predictions)
+decoded_article_type = articleType_binarizer.inverse_transform(article_type_predictions_array)
+
+# Creating a DataFrame
+df_pred = pd.DataFrame({
+    'decoded_masterCategory': decoded_masterCategory,
+    'decoded_subcategory': decoded_subcategory,
+    'decoded_articleType': decoded_article_type
+})
+
+print(df_pred)
 
 # Parcourir chaque échantillon dans le dataset
-for i, item in enumerate(dataset['train']):
-    print(f"Échantillon {i}: {item['productDisplayName']}")
+# for i, item in enumerate(dataset['train']):
+    # print(f"Échantillon {i}: {item['productDisplayName']}")
 
     # Afficher les prédictions
-    print("Master Category:", mastercategory_predictions[i].int())
-    print("Sub Category:", subcategory_predictions[i].int())
-    print("Article Type:", article_type_predictions[i].int())
+    # print("Master Category:", mastercategory_predictions[i].int())
+    #print("Sub Category:", subcategory_predictions[i].int())
+    # print("Article Type:", article_type_predictions[i].int())

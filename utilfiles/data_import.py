@@ -6,7 +6,6 @@ from transformers import BertTokenizer
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm
 from modele.modeles import resnet_model, bert_model
@@ -60,6 +59,7 @@ class EmbeddingDataset(Dataset):
 
 
 dataset = load_dataset("ashraq/fashion-product-images-small")
+
 
 # Label notarization
 masterCategory_binarizer = LabelBinarizer()
