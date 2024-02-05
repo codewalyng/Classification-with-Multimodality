@@ -126,7 +126,7 @@ else:
         combined_text = f"{item['productDisplayName']} {item['gender']} {item['baseColour']} {item['season']} {item['usage']}"
         texts.append(combined_text)
 
-        images = [preprocess_image(item['image']) for item in dataset['train']]
+    images = [preprocess_image(item['image']) for item in dataset['train']]
 
     # Generate text and image embeddings
     text_embeddings = generate_text_embeddings(texts, tokenizer, bert_model)
